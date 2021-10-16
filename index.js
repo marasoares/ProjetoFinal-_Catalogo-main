@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -8,6 +9,7 @@ let message1 = "";
 let message2 = "";
 const cadastroLoja = [];
 const cadastroProduto = [];
+const quemSomos = [];
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -21,16 +23,17 @@ app.get("/", (req, res) => {
     titulo: "Good Sales",
     cadastroLoja: cadastroLoja,
     cadastroProduto: cadastroProduto,
+    quemSomos: quemSomos,
     message,
   })
 });
 
 app.get("/cadastro", (req, res) => {
-  res.render(cadastro);
+  res.render("cadastroLoja");
 });
 
 app.get("/quemsomos", (req, res) => {
-  res.render("quemsomos");
+  res.render("quemSomos");
 });
 
 app.post("/new", (req, res) => {
