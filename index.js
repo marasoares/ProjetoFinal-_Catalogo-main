@@ -10,6 +10,8 @@ let message2 = "";
 const cadastroLoja = [];
 const cadastroProduto = [];
 const quemSomos = [];
+const cadastroCliente = [];
+
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
