@@ -7,6 +7,8 @@ const port = process.env.PORT || 3000;
 let message = "";
 let message1 = "";
 let message2 = "";
+let message3 = "";
+
 const cadastroLoja = [];
 const cadastroProduto = [];
 const quemSomos = [];
@@ -30,12 +32,21 @@ app.get("/", (req, res) => {
   })
 });
 
-app.get("/cadastro", (req, res) => {
+app.post("/cadastro", (req, res) => {
   res.render("cadastroLoja");
+  message;
 });
 
 app.get("/quemsomos", (req, res) => {
   res.render("quemSomos");
+});
+
+app.post("/cadastrocliente", (req, res) => {
+  const {nome, sobrenome, cpf, endereco, numero, complemento, bairro, cidade, uf, cep, email} = req.body;
+  const novoCliente = ({nome: nome, sobrenome: sobrenome, cpf: cpf, endereco: endereco, numero: numero, complemento: complemento, bairro: bairro, cidade: cidade, uf: uf, cep: cep, email: email});
+  cadastroCliente.push(novoCliente);
+  message3 = `Olá, ${nome}! Seu cadastro foi realizado com sucesso! `
+  res.redirect("/");
 });
 
 app.post("/new", (req, res) => {
