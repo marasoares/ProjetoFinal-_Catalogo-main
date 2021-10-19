@@ -17,7 +17,7 @@ const cadastroCliente = [];
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(express.urlencoded());
+app.use(express.urlencoded());
 
 app.get("/", (req, res) => {
   setTimeout(() => {
@@ -32,9 +32,68 @@ app.get("/", (req, res) => {
   })
 });
 
-app.post("/cadastro", (req, res) => {
-  res.render("cadastroLoja");
-  message;
+const lojas = require("./models/loja");
+
+app.post("/criar", async (req, res) => {
+  const { nome, descricao, imagem } = req.body;
+
+  const loja = await Loja.create({
+    nome,
+    descricao,
+    imagem,
+  });
+
+  res.render("criar", {
+    loja,
+  });
+});
+
+app.get("/", async (req, res) => {
+  const lojas = await Loja.findAll();
+
+  res.render("index", {
+    lojas,
+  });
+});
+
+app.post("/criar", async (req, res) => {
+  const { nome, descricao, imagem } = req.body;
+
+  if (!nome) {
+    res.render("criar", {
+      mensagem: "Nome é obrigatório",
+    });
+  }
+
+  if (!imagem) {
+    res.render("criar", {
+      mensagem: "Imagem é obrigatório",
+    });
+  }
+
+  try {
+    const filme = await Filme.create({
+      nome,
+      descricao,
+      imagem,
+    });
+
+    res.render("criar", {
+      filme,
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.render("criar", {
+      mensagem: "Ocorreu um erro ao cadastrar o Filme!",
+    });
+  }
+})
+
+app.get("/cadastro", (req, res) => {
+  res.render("cadastroLoja", {
+    message: "Cadastre sua loja!",
+  });
 });
 
 app.get("/quemsomos", (req, res) => {
@@ -45,12 +104,14 @@ app.post("/cadastrocliente", (req, res) => {
   const {nome, sobrenome, cpf, endereco, numero, complemento, bairro, cidade, uf, cep, email} = req.body;
   const novoCliente = ({nome: nome, sobrenome: sobrenome, cpf: cpf, endereco: endereco, numero: numero, complemento: complemento, bairro: bairro, cidade: cidade, uf: uf, cep: cep, email: email});
   cadastroCliente.push(novoCliente);
-  message3 = `Olá, ${nome}! Seu cadastro foi realizado com sucesso! `
+  message = `Olá, ${nome}! Seu cadastro foi realizado com sucesso! `
   res.redirect("/");
 });
 
 app.post("/new", (req, res) => {
   const {loja, categoria, logo, cnpj, contato, email} = req.body;
+  console.log("AQUI ESTÁ:");
+  console.log(req.body)
   const novaLoja = ({loja: loja, categoria: categoria, logo: logo, cnpj: cnpj, contato: contato, email: email});
   cadastroLoja.push(novaLoja);
   message1 = `A loja ${loja} foi cadastrada com sucesso!`;
